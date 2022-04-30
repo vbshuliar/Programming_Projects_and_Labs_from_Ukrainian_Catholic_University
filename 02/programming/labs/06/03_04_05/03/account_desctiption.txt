@@ -1,0 +1,37 @@
+- Register
+    1) Type "register".
+    2) Enter username and password.
+    3) Check availability of username and correctness of password
+        - If the username is used, raises UsernameAlreadyExists
+        - If the password is incorrect, raises PasswordTooShort
+    4) Save the user if everything is correct.
+    5) Automatically login user into their account.
+
+- Login
+    1) Type "login".
+    2) Enter username and password.
+    3) Check, if the info is correct
+        - If the username doesn't exist, raises InvalidUsername
+        - If the password is not right, raises InvalidPassword
+    4) If everything is OK, proceed. Otherwise, run login again.
+
+- Add
+    1) Login
+    2) Type "add"
+        - If you don't have the permission, raises NotPermittedError
+    3) Type text for a new note.
+    4) Type tags for a new note.
+
+- Check
+    1) Login
+    2) Type "check"
+    3) Observe all your notes.
+        - If you don't have the permissions, raises NotPermittedError
+
+- Quit
+    1) Type "quit".
+    2) Program stops working.
+
+Permissions:
+- add - permission to add notes
+- check - permission check notes
