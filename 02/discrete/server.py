@@ -2,7 +2,8 @@
 
 import socket
 import threading
-import rsa
+import rsa_algorithm as rsa
+import hashlib
 
 
 class Server:
@@ -48,18 +49,31 @@ class Server:
 
     def broadcast(self, text: str):
         """Broadcast."""
+
         for _ in self.clients:
-            _.send(str(rsa.encoding(text, self.username_lookup[_][-1])).encode())
+            temp = text
+            text_hash = hashlib.sha256()
+            text_hash.update(temp.encode())
+            text_hash = str(text_hash.digest())
+            temp = str(rsa.encoding(text, self.username_lookup[_][-1]))
+            _.send(f"({text_hash}, {temp})".encode())
 
     def handle_client(self, client: socket, address):
         """Handles client."""
         while True:
-            text = rsa.decoding(client.recv(1024).decode(), self.keys_private)
+            data = client.recv(1024).decode()
+            text_hash, text = data[1:-1].split(", ")
+            text = rsa.decoding(text, self.keys_private)
+            test = hashlib.sha256()
+            test.update(text.encode())
+            test = str(test.digest())
+            assert test == text_hash
             for _ in self.clients:
                 if _ != client:
-                    _.send(rsa.encoding(text, self.username_lookup[_][-1]).encode())
+                    text = rsa.encoding(text, self.username_lookup[_][-1])
+                    _.send(f"({text_hash}, {text})".encode())
 
 
 if __name__ == "__main__":
-    s = Server(9001)
+    s = Server(9002)
     s.start()
