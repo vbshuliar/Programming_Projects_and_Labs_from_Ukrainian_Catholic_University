@@ -23,7 +23,6 @@ class Client:
             self.s.connect((self.server_ip, self.port))
         except Exception as e:
             return print("Server is offline!")
-
         keys = rsa.keys()
         self.keys_public = (keys[1], keys[0])
         self.keys_private = (keys[2], keys[0])
@@ -31,7 +30,6 @@ class Client:
         data = self.s.recv(1024).decode()
         self.server_keys_public = list(map(int, data[1:-1].split(", ")))
         self.s.send(str(self.keys_public).encode())
-
         message_handler = threading.Thread(target=self.read_handler, args=())
         message_handler.start()
         input_handler = threading.Thread(target=self.write_handler, args=())

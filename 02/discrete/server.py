@@ -21,7 +21,6 @@ class Server:
         """Start."""
         self.s.bind((self.host, self.port))
         self.s.listen(100)
-
         keys = rsa.keys()
         self.keys_public = [keys[1], keys[0]]
         self.keys_private = [keys[2], keys[0]]
@@ -32,13 +31,10 @@ class Server:
             client.send(f"{self.keys_public}".encode())
             data = client.recv(1024).decode()
             client_keys_public = list(map(int, data[1:-1].split(", ")))
-
             self.username_lookup[client] = [username, client_keys_public]
             self.clients.append(client)
-
             print(f"New client: {username}.")
             self.broadcast(f"{username} joined chat.")
-
             threading.Thread(
                 target=self.handle_client,
                 args=(
