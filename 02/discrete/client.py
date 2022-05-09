@@ -6,18 +6,16 @@ import hashlib
 
 
 class Client:
-    """Client class."""
+    """Chat user."""
 
     def __init__(self, server_ip: str, port: int, username: str) -> None:
-        """Receives information."""
-
+        """Basic information."""
         self.server_ip = server_ip
         self.port = port
         self.username = username
 
     def init_connection(self):
         """Initializes connection."""
-
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             self.s.connect((self.server_ip, self.port))
@@ -36,7 +34,7 @@ class Client:
         input_handler.start()
 
     def read_handler(self):
-        """Read handler."""
+        """Decodes message from another user in the chat."""
         while True:
             data = self.s.recv(1024).decode()
             text_hash, text = data[1:-1].split(", ")
@@ -48,9 +46,9 @@ class Client:
             print(text)
 
     def write_handler(self):
-        """Write handler."""
+        """Encodes user's input and sends it to the server."""
         while True:
-            message = input()
+            message = input()[:180]
             text = rsa.encoding(message, self.server_keys_public)
             text_hash = hashlib.sha256()
             text_hash.update(message.encode())

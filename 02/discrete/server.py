@@ -7,10 +7,10 @@ import hashlib
 
 
 class Server:
-    """Server class."""
+    """Server of the chat."""
 
     def __init__(self, port: int) -> None:
-        """Receives information."""
+        """Basic information."""
         self.host = "127.0.0.1"
         self.port = port
         self.clients = []
@@ -18,13 +18,12 @@ class Server:
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def start(self):
-        """Start."""
+        """Start of the chat."""
         self.s.bind((self.host, self.port))
         self.s.listen(100)
         keys = rsa.keys()
         self.keys_public = [keys[1], keys[0]]
         self.keys_private = [keys[2], keys[0]]
-
         while True:
             client, address = self.s.accept()
             username = client.recv(1024).decode()
@@ -44,8 +43,7 @@ class Server:
             ).start()
 
     def broadcast(self, text: str):
-        """Broadcast."""
-
+        """Announces new chat member."""
         for _ in self.clients:
             temp = text
             text_hash = hashlib.sha256()
@@ -55,7 +53,7 @@ class Server:
             _.send(f"({text_hash}, {temp})".encode())
 
     def handle_client(self, client: socket, address):
-        """Handles client."""
+        """Resends user's message to other chat members."""
         while True:
             data = client.recv(1024).decode()
             text_hash, text = data[1:-1].split(", ")
