@@ -42,7 +42,6 @@ class ArrayQueue(AbstractCollection):
         Raises: KeyError if queue is empty."""
         if self.isEmpty():
             raise KeyError("Queue is empty")
-        print("!!!", len(self), len(self) - 1)
         return self._items[len(self) - 1]
 
     # Mutator methods
@@ -56,18 +55,15 @@ class ArrayQueue(AbstractCollection):
         """Inserts item at rear of the queue."""
         # Resize array if full
         if len(self) == len(self._items):
-            print("!!!!!!!", len(self))
             temp = Array(len(self._items) * 2)
             # Copy so that front is at 0 and rear is at len(self) - 1
             i = 0
             # Copy data from position front through the end of the array
 
             for j in range(self._front, len(self)):
-                print("&&&&&", self._items[j])
                 temp[i] = self._items[j]
                 i += 1
             if self._rear < len(self) - 1:
-                print("&&&&&", self._rear, len(self))
                 # Copy data from position 0 through the rear
                 for j in range(0, self._rear + 1):
                     temp[i] = self._items[j]
