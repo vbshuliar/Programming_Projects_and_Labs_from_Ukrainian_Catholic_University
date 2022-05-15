@@ -50,68 +50,35 @@ class Maze:
         Attempts to solve the maze by finding a path from the starting cell
         to the exit. Returns True if a path is found and False otherwise.
         """
-        stack = Stack()
-        stack.push(self._start_cell)
-
-        while not stack.is_empty():
-            current_cell = stack.pop()
-            self._mark_path(current_cell.row, current_cell.col)
-            if self._exit_found(current_cell.row, current_cell.col):
-                return True
-
-            next_cells = [
-                _CellPosition(current_cell.row, current_cell.col - 1),
-                _CellPosition(current_cell.row + 1, current_cell.col),
-                _CellPosition(current_cell.row, current_cell.col + 1),
-                _CellPosition(current_cell.row - 1, current_cell.col),
+        cells = Stack()
+        cells.push(self._start_cell)
+        while not cells.is_empty():
+            try:
+                current = cells.peek()
+            except AssertionError:
+                break
+            if self._valid_move(current.row, current.col):
+                self._mark_path(current.row, current.col)
+                if self._exit_found(current.row, current.col):
+                    return True
+            neighbours = [
+                (current.row, current.col - 1),
+                (current.row + 1, current.col),
+                (current.row, current.col + 1),
+                (current.row - 1, current.col),
             ]
+            correct = False
+            for neighbour in neighbours:
+                if self._valid_move(neighbour[0], neighbour[1]):
+                    correct = True
+                    cells.push(_CellPosition(neighbour[0], neighbour[1]))
+                    continue
 
-            has_valid = False
-
-            for next_cell in next_cells:
-                if self._valid_move(next_cell.row, next_cell.col):
-                    stack.push(next_cell)
-                    has_valid = True
-
-            if not has_valid:
-                self._mark_tried(current_cell.row, current_cell.col)
-                for prev_cell in next_cells:
-                    if (
-                        self._get_cell_value(prev_cell.row, prev_cell.col)
-                        == self.PATH_TOKEN
-                    ):
-                        stack.push(prev_cell)
+            if not correct:
+                cells.pop()
+                self._mark_tried(current.row, current.col)
+                continue
         return False
-
-
-def _get_cell_value(self, row, col):
-    """Returns cell's value."""
-    if (
-        row >= 0
-        and row < self.num_rows()
-        and col >= 0
-        and col < self.num_cols()
-        and self._maze_cells[row, col] is None
-    ):
-        return self._maze_cell[row, col]
-
-    def reset(self):
-        """Resets the maze by removing all "path" and "tried" tokens."""
-        for i in range(self.num_rows()):
-            for j in range(self.num_cols()):
-                if self._maze_cells[i, j] != self.MAZE_WALL:
-                    self._maze_cells[i, j] = None
-
-    def __str__(self):
-        """Returns a text-based representation of the maze."""
-        return "\n".join(
-            [
-                " ".join(
-                    [self._maze_cells[i, j] or "_" for j in range(self.num_cols())]
-                )
-                for i in range(self.num_cols())
-            ]
-        )
 
     def _valid_move(self, row, col):
         """Returns True if the given cell position is a valid move."""
@@ -122,6 +89,34 @@ def _get_cell_value(self, row, col):
             and col < self.num_cols()
             and self._maze_cells[row, col] is None
         )
+
+    def _get_cell_value(self, row, col):
+        """Returns cell's value."""
+        if (
+            row >= 0
+            and row < self.num_rows()
+            and col >= 0
+            and col < self.num_cols()
+            and self._maze_cells[row, col] is None
+        ):
+            return self._maze_cell[row, col]
+
+    def reset(self):
+        """Resets the maze by removing all "path" and "tried" tokens."""
+        for i in range(self.num_rows()):
+            for j in range(self.num_cols()):
+                if self._maze_cells[i, j] != self.MAZE_WALL:
+                    self._maze_cells[i, j] = None
+
+    def __str__(self):
+        """Returns a text-based representation of the maze."""
+        data = []
+        for row in range(self.num_rows()):
+            temp = []
+            for col in range(self.num_cols()):
+                temp.append(self._maze_cells[row, col] or "_")
+            data.append(" ".join(temp) + " ")
+        return "\n".join(data)
 
     def _exit_found(self, row, col):
         """Helper method to determine if the exit was found."""
@@ -142,7 +137,3 @@ class _CellPosition(object):
     def __init__(self, row, col):
         self.row = row
         self.col = col
-
-
-if __name__ == "__main__":
-    pass
