@@ -3,7 +3,7 @@
 from btnode import Node
 
 
-class LinkedBST:
+class Tree:
     """Linked binary search tree."""
 
     def __init__(self, value):
@@ -33,27 +33,3 @@ class LinkedBST:
     def get_root(self):
         """Returns root."""
         return self.root.value
-
-    def preorder(self):
-        """Supports a preorder traversal on a view of self."""
-        print(self.root)
-        if self.left:
-            self.left.preorder()
-        if self.right:
-            self.right.preorder()
-
-    def inorder(self):
-        """Supports an inorder traversal on a view of self."""
-        if self.left:
-            self.left.inorder()
-        print(self.root)
-        if self.right:
-            self.right.inorder()
-
-    def postorder(self):
-        """Supports a postorder traversal on a view of self."""
-        if self.left:
-            self.left.postorder()
-        if self.right:
-            self.right.postorder()
-        print(self.root)

@@ -7,10 +7,10 @@ def main():
     """Game loop."""
     board = Board()
     while True:
-        print(board)
         decision = turn(board)
-        board_status(board.get_status())
         board.make_move(decision, "x")
+        print(board)
+        board_status(board.get_status())
         # board.make_computer_move()
         # board_status(board.get_status())
 

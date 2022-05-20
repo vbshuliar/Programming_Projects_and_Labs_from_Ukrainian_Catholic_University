@@ -18,8 +18,6 @@ class Node(object):
     @value.setter
     def value(self, new):
         """Setter for the value."""
-        if not isinstance(new, int):
-            raise TypeError
         self._value = new
 
     @property
@@ -30,8 +28,6 @@ class Node(object):
     @left.setter
     def left(self, value):
         """Setter for the left node."""
-        if not isinstance(value, int):
-            raise TypeError
         self._left = Node(value)
 
     @property
@@ -42,6 +38,4 @@ class Node(object):
     @right.setter
     def right(self, value):
         """Setter for the right node."""
-        if not isinstance(value, int):
-            raise TypeError
         self._right = Node(value)

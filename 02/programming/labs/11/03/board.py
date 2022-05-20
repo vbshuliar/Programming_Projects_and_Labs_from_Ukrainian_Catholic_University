@@ -1,8 +1,16 @@
 """Board."""
+from btree import Tree
+from btnode import Node
+from copy import deepcopy
+from sys import setrecursionlimit
+
+setrecursionlimit(100000)
 
 
 class Board:
     """Board."""
+
+    score = {"0": 1, "x": -1, "draw": 0}
 
     def __init__(self):
         """Receives information."""
@@ -68,20 +76,85 @@ class Board:
 
     def make_move(self, position, turn):
         """Makes movement."""
-        if (
-            position[0] not in range(3)
-            or position[1] not in range(3)
-            or turn not in ["x", "0"]
-        ):
+        if position[0] not in range(3) or position[1] not in range(3):
             raise IndexError
+        if turn not in ["x", "0"]:
+            raise TypeError
         if self.field[position[0]][position[1]] != " ":
             raise IndexError
-        else:
-            self.field[position[0]][position[1]] = turn
+        self.field[position[0]][position[1]] = turn
 
     def make_computer_move(self):
         """Makes computer movement."""
-        
+        my_turn = "0"
+        tree = Tree(self)
+
+        def variants(field):
+            """Finds two moves."""
+            movements = []
+            for row in range(3):
+                for column in range(3):
+                    if field[row][column] == " ":
+                        movements.append((row, column))
+                        if len(movements) == 2:
+                            return movements
+            return movements
+
+        def tree_creator(root, turn="0"):
+            """Recursively creates binary search tree."""
+
+            game_status = root.value.get_status()
+            possible = variants(root.value.board)
+
+            if len(possible) == 0:
+                return "draw"
+
+            elif game_status == "continue":
+                return self.score[game_status]
+
+            elif len(possible) >= 1:
+                if turn == "x":
+                    root.left = tree_creator(
+                        Node(deepcopy(root.value).make_move(possible[0], turn)), turn
+                    )
+                else:
+                    root.left = tree_creator(
+                        Node(deepcopy(root.value).make_move(possible[0], turn)), "x"
+                    )
+
+            if len(possible) == 2:
+                if turn == "x":
+                    root.right = tree_creator(
+                        Node(deepcopy(root.value).make_move(possible[1], turn)), turn
+                    )
+                else:
+                    root.right = tree_creator(
+                        Node(deepcopy(root.value).make_move(possible[1], turn)), "x"
+                    )
+
+        tree_creator(tree.key)
+
+        def points_counter(root):
+            """Counts points."""
+            if type(root) == int:
+                return root
+
+            if not root:
+                return 0
+
+            return points_counter(root.left) + points_counter(root.right)
+
+        if type(tree.key.left) == int and tree.key.left == 1:
+            self.make_move(variants(self.board)[0], my_turn)
+
+        elif type(tree.key.left) == int and tree.key.right == 1:
+            self.make_move(variants(self.board)[1], my_turn)
+
+        else:
+            if points_counter(tree.key.right) < points_counter(tree.key.left):
+                self.make_move(variants(self.board)[0], my_turn)
+            else:
+                self.make_move(variants(self.board)[1], my_turn)
 
 
 if __name__ == "__main__":
@@ -89,6 +162,5 @@ if __name__ == "__main__":
     test.make_move((2, 2), "x")
     test.make_move((1, 1), "0")
     test.make_move((1, 2), "x")
-    test.make_move((1, 0), "x")
-    test.make_move((2, 0), "x")
+    test.make_computer_move()
     print(test)
