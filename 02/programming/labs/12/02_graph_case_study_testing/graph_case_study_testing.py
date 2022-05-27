@@ -1,7 +1,8 @@
 """Testing module graph case study."""
 from graph import LinkedDirectedGraph
 from copy import deepcopy
-from 
+from algorithms import *
+from answers import *
 
 
 def read_file(path):
@@ -36,24 +37,31 @@ def read_file(path):
     return graph
 
 
-def bfs_test():
+def bfs_test(graph):
     """BFS algorythm testing."""
-    pass
+    test = [str(vertex) for vertex in BFS_complete(graph)]
+    print("\n".join(test))
 
 
-def dfs_test():
+def dfs_test(graph):
     """BFS algorythm testing."""
-    pass
+    test = [str(vertex) for vertex in DFS_complete(graph)]
+    assert test == dfs_answer
+    print("DFS algorithm completed successfully. Here are results:")
+    print("\n".join(test))
 
 
-def topological_sort_test():
+def topological_sort_test(graph):
     """Topolocial sort testing."""
-    pass
+    test = [str(vertex) for vertex in topoSort(graph)]
+    assert test == topological_sorting_answer
+    print("Topological sorting completed successfully. Here are results:")
+    print("\n".join(test))
 
 
 if __name__ == "__main__":
     test = read_file(
-        "02/programming/labs/12/02_graph_case_study_testing/stanford_cs.txt"
+        "/Users/macbookpro/Library/CloudStorage/OneDrive-Personal/ucu/python/02/programming/labs/12/02_graph_case_study_testing/stanford_cs.txt"
     )
-    for _ in test.edges():
-        print(_)
+    topological_sort_test(test)
+    dfs_test(test)

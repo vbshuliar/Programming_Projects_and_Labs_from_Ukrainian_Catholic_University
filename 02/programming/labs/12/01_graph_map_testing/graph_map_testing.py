@@ -71,9 +71,7 @@ def topological_sort_test(graph):
 
 
 if __name__ == "__main__":
-    print("Enter path to text file:")
-    path = "02/programming/labs/12/01_graph_map_testing/stanford_cs.txt"
-    path = input(">>> ")
+    path = "stanford_cs.txt"
     graph = read_file(path)
     dfs_test(graph)
     print()

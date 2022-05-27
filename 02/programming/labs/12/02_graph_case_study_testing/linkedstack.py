@@ -6,12 +6,11 @@ Author: Ken Lambert
 from node import Node
 from abstractstack import AbstractStack
 
-
 class LinkedStack(AbstractStack):
     """A link-based stack implementation."""
 
     # Constructor
-    def __init__(self, sourceCollection=None):
+    def __init__(self, sourceCollection = None):
         """Sets the initial state of self, which includes the
         contents of sourceCollection, if it's present."""
         self._items = None
@@ -20,14 +19,14 @@ class LinkedStack(AbstractStack):
     # Accessor methods
     def __iter__(self):
         """Supports iteration over a view of self."""
-
+        
         def visitNodes(node):
             """Adds items to tempList from tail to head."""
             if not node is None:
                 visitNodes(node.next)
                 tempList.append(node.data)
-
-        tempList = list()
+                
+        tempList = list()                
         visitNodes(self._items)
         return iter(tempList)
 
@@ -63,3 +62,5 @@ class LinkedStack(AbstractStack):
         self._items = self._items.next
         self._size -= 1
         return data
+        
+        

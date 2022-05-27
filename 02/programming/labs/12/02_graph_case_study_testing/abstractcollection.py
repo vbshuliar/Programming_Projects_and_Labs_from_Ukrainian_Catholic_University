@@ -6,7 +6,6 @@ Assumes that each collection type supports an iterator and
 an add method.
 """
 
-
 class AbstractCollection(object):
     """Represents an abstract collection for all collection types."""
 
@@ -39,12 +38,9 @@ class AbstractCollection(object):
         return result
 
     def __eq__(self, other):
-        if self is other:
-            return True
-        if type(self) != type(other):
-            return False
-        if len(self) != len(other):
-            return False
+        if self is other: return True
+        if type(self) != type(other): return False
+        if len(self) != len(other): return False
         otherItems = iter(other)
         for item in self:
             if item != next(otherItems):
