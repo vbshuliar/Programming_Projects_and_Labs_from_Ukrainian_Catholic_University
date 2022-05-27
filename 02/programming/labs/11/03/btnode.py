@@ -28,7 +28,7 @@ class Node(object):
     @left.setter
     def left(self, value):
         """Setter for the left node."""
-        self._left = Node(value)
+        self._left = value
 
     @property
     def right(self):
@@ -38,4 +38,4 @@ class Node(object):
     @right.setter
     def right(self, value):
         """Setter for the right node."""
-        self._right = Node(value)
+        self._right = value

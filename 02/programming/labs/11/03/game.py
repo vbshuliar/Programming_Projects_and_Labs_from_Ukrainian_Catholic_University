@@ -11,8 +11,6 @@ def main():
         board.make_move(decision, "x")
         print(board)
         board_status(board.get_status())
-        # board.make_computer_move()
-        # board_status(board.get_status())
 
 
 def board_status(status):

@@ -12,7 +12,7 @@ class Tree:
 
     def set_left(self, value):
         """Sets left."""
-        self.root.left = value
+        self.root.left = Node(value)
 
     def get_left(self):
         """Returns left."""
@@ -20,7 +20,7 @@ class Tree:
 
     def set_right(self, value):
         """Sets right."""
-        self.root.right = value
+        self.root.right = Node(value)
 
     def get_right(self):
         """Returns right."""
