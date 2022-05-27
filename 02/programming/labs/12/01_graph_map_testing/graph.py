@@ -87,8 +87,6 @@ class Graph:
         self._outgoing = {}
         # only create second map for directed graph; use alias for undirected
         self._incoming = {} if directed else self._outgoing
-        print(self._outgoing)
-        print(self._incoming)
 
     def _validate_vertex(self, v):
         """Verify that v is a Vertex of this graph."""

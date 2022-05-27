@@ -1,4 +1,4 @@
-"""DFS algorythm."""
+"""DFS algorithm."""
 
 
 def DFS(g, u, discovered):

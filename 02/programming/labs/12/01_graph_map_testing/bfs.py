@@ -1,4 +1,4 @@
-"""BFS algorythm."""
+"""BFS algorithm."""
 
 
 def BFS(g, s, discovered):
